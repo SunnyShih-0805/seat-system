@@ -173,7 +173,21 @@ placeholder="輸入座號">
 </div>
 
 
+<div class="box hidden" id="admin">
 
+<h2>管理員模式</h2>
+
+<div id="adminInfo"></div>
+
+<button onclick="refreshAdmin()">
+重新整理
+</button>
+
+<button onclick="resetAll()">
+重置系統
+</button>
+
+</div>
 
 
 <div class="box hidden" id="main">
@@ -196,6 +210,14 @@ placeholder="輸入座號">
 
 
 <script>
+
+const params =
+new URLSearchParams(
+  window.location.search
+);
+
+const isTeacher =
+params.get("id")==="teacher";
 
 let myRank = null;
 let polling = null;
@@ -463,6 +485,20 @@ async function checkTurn(){
     "輪到你選位了";
 
     loadSeats();
+
+  }
+
+}
+
+window.onload=function(){
+
+  if(isTeacher){
+
+    document
+    .getElementById("admin")
+    .classList.remove("hidden");
+
+    refreshAdmin();
 
   }
 
