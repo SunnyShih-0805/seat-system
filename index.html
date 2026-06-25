@@ -490,6 +490,63 @@ async function checkTurn(){
 
 }
 
+async function refreshAdmin(){
+
+  let res=
+  await fetch(
+    API+
+    "?action=dashboard"
+  );
+
+  let data=
+  await res.json();
+
+  let html="";
+
+  html+="目前輪到："+data.currentRank+"<br><br>";
+
+  html+="已選座位：<br>";
+
+  for(let i=1;i<data.seats.length;i++){
+
+    if(
+      data.seats[i][1]==="Locked"
+    ){
+
+      html+=
+      data.seats[i][0]
+      +" → "
+      +data.seats[i][2]
+      +"<br>";
+
+    }
+
+  }
+
+  document
+  .getElementById("adminInfo")
+  .innerHTML=
+  html;
+
+}
+
+async function resetAll(){
+
+  if(!confirm("確定重置？")){
+    return;
+  }
+
+  await fetch(
+    API+
+    "?action=reset"
+  );
+
+  alert("完成");
+
+  refreshAdmin();
+
+}
+  
 window.onload=function(){
 
   if(isTeacher){
