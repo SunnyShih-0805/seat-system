@@ -197,6 +197,8 @@ placeholder="輸入座號">
 
 <script>
 
+let myRank = null;
+let polling = null;
 
 const API=
 "https://script.google.com/macros/s/AKfycbwYo6oOn96gzSzbxjnM--wu25wsLSiXWs7ffQ76y3PDW6ZR2vlevRy4j9EfRNVOZqxCiw/exec";
@@ -254,9 +256,17 @@ document
 .innerHTML=
 data.name;
 
+if(data.rank){
 
+  myRank = Number(data.rank);
 
-loadSeats();
+  waitForTurn();
+
+}else{
+
+  askRank();
+
+}
 
 
 }
@@ -374,7 +384,89 @@ alert(data.message);
 
 }
 
+async function askRank(){
 
+  let rank =
+  prompt("請輸入你的名次");
+
+  if(!rank){
+    return;
+  }
+
+  let res =
+  await fetch(
+    API+
+    "?action=setRank"+
+    "&seatNo="+mySeatNo+
+    "&rank="+rank
+  );
+
+  let data =
+  await res.json();
+
+  if(data.success){
+
+    myRank = Number(rank);
+
+    waitForTurn();
+
+  }
+
+}
+
+async function waitForTurn(){
+
+  document
+  .getElementById("status")
+  .innerHTML =
+  "等待叫號中";
+
+  checkTurn();
+
+  polling =
+  setInterval(
+    checkTurn,
+    5000
+  );
+
+}
+
+async function checkTurn(){
+
+  let res =
+  await fetch(
+    API+
+    "?action=currentRank"
+  );
+
+  let data =
+  await res.json();
+
+  document
+  .getElementById("status")
+  .innerHTML =
+  "目前輪到第 "
+  +data.currentRank+
+  " 名";
+
+  if(
+    Number(data.currentRank)
+    ===
+    Number(myRank)
+  ){
+
+    clearInterval(polling);
+
+    document
+    .getElementById("status")
+    .innerHTML =
+    "輪到你選位了";
+
+    loadSeats();
+
+  }
+
+}
 
 </script>
 
