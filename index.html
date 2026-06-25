@@ -228,7 +228,6 @@ const API=
 
 
 let mySeatNo;
-let hasChosen = false;
 
 
 
@@ -352,14 +351,6 @@ div.classList.add("locked");
 
 div.onclick=function(){
 
-if(hasChosen){
-
-alert("你已經完成選位");
-
-return;
-
-}
-
 choose(seat[0]);
 
 }
@@ -401,19 +392,7 @@ await res.json();
 
 if(data.success){
 
-hasChosen = true;
-
 alert("選位成功");
-
-
-clearInterval(polling);
-
-
-document
-.getElementById("status")
-.innerHTML =
-"已完成選位";
-
 
 loadSeats();
 
@@ -491,8 +470,6 @@ async function checkTurn(){
   "目前輪到第 "
   +data.currentRank+
   " 名";
-
-  loadSeats();
 
   if(
     Number(data.currentRank)
