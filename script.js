@@ -51,6 +51,28 @@ student=res.student;
 
 
 
+if(
+!student.rank ||
+student.rank==""
+){
+
+
+document
+.getElementById("loginBox")
+.style.display="none";
+
+
+document
+.getElementById("rankBox")
+.style.display="block";
+
+
+return;
+
+
+}
+
+
 loginBox.style.display="none";
 
 
