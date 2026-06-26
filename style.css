@@ -2,11 +2,15 @@ body{
 
 font-family:
 "Microsoft JhengHei",
-Arial;
+Arial,
+sans-serif;
 
 background:#f4f4f4;
 
+margin:0;
+
 }
+
 
 
 
@@ -26,21 +30,25 @@ text-align:center;
 
 input{
 
+font-size:18px;
+
 padding:10px;
 
-font-size:18px;
+margin:5px;
 
 }
 
 
 
+
+
 button{
 
-padding:10px 20px;
+font-size:16px;
+
+padding:10px 18px;
 
 margin:5px;
-
-font-size:16px;
 
 cursor:pointer;
 
@@ -50,10 +58,29 @@ cursor:pointer;
 
 
 
+#info,
+#status,
+#system{
+
+
+background:white;
+
+border-radius:12px;
+
+padding:15px;
+
+margin:15px;
+
+font-size:20px;
+
+}
+
+
+
 
 
 #seatArea,
-.classroom{
+#classroom{
 
 
 display:grid;
@@ -63,10 +90,11 @@ grid-template-columns:
 repeat(8,80px);
 
 
-grid-auto-rows:70px;
+grid-template-rows:
+repeat(6,70px);
 
 
-gap:15px;
+gap:12px;
 
 
 justify-content:center;
@@ -87,6 +115,9 @@ margin-top:30px;
 background:white;
 
 
+border:2px solid #ddd;
+
+
 border-radius:12px;
 
 
@@ -102,13 +133,13 @@ justify-content:center;
 font-size:18px;
 
 
-border:2px solid #ddd;
-
-
 cursor:pointer;
 
 
-transition:.2s;
+user-select:none;
+
+
+transition:.15s;
 
 
 }
@@ -119,12 +150,9 @@ transition:.2s;
 
 .seat:hover{
 
-
 transform:scale(1.05);
 
-
 }
-
 
 
 
@@ -154,13 +182,10 @@ cursor:not-allowed;
 background:#ffd966;
 
 
-border-color:#f1b900;
+border-color:#d6a000;
 
 
 }
-
-
-
 
 
 
@@ -170,19 +195,20 @@ border-color:#f1b900;
 
 
 grid-column:
+
 1 / 9;
+
+
+grid-row:1;
 
 
 background:#ccc;
 
 
-padding:15px;
-
-
-margin-bottom:20px;
-
-
 border-radius:12px;
+
+
+padding:15px;
 
 
 font-size:22px;
@@ -200,10 +226,10 @@ font-size:22px;
 background:white;
 
 
+border-radius:12px;
+
+
 padding:15px;
-
-
-border-radius:10px;
 
 
 text-align:left;
@@ -213,19 +239,3 @@ line-height:2;
 
 
 }
-
-
-
-
-#system{
-
-
-font-size:20px;
-
-
-margin:20px;
-
-
-}
-
-
