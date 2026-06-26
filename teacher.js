@@ -3,11 +3,15 @@ const API =
 
 
 
+
 function callAPI(data){
 
 return fetch(API,{
+
 method:"POST",
+
 body:JSON.stringify(data)
+
 })
 .then(r=>r.json());
 
@@ -16,29 +20,99 @@ body:JSON.stringify(data)
 
 
 
-function load(){
+
+
+function update(){
 
 
 callAPI({
+
 action:"teacher"
+
 })
 
-.then(d=>{
+.then(data=>{
 
 
-info.innerHTML=
+let sys=data.system;
+
+
+
+system.innerHTML=
 `
-目前排名:${d.rank}
+狀態：
+${sys.status}
+
+<br>
+
+目前順位：
+${sys.currentRank}
+
 `;
 
 
 
-drawSeats(d.seats);
+
+showStudents(data.students);
+
+
+
+drawSeats(data.seats);
+
 
 
 });
 
+
 }
+
+
+
+
+
+
+
+
+function showStudents(list){
+
+
+let html="";
+
+
+
+list.forEach(s=>{
+
+
+html+=`
+
+<div>
+
+座號:${s[0]}
+姓名:${s[1]}
+排名:${s[2]}
+
+${s[5]?"🟢在線":"⚪未登入"}
+
+</div>
+
+`;
+
+
+
+});
+
+
+
+students.innerHTML=html;
+
+
+
+}
+
+
+
+
+
 
 
 
@@ -55,16 +129,31 @@ let html=
 
 
 
-html+=`<div class="classroom">`;
+html+=
+`
+<div class="classroom">
+`;
+
 
 
 
 seats.forEach(s=>{
 
 
+let cls="seat";
+
+
+if(s.student){
+
+cls+=" locked";
+
+}
+
+
+
 html+=`
 
-<div class="seat ${s.student?"locked":""}">
+<div class="${cls}">
 
 ${s.id}
 
@@ -77,16 +166,23 @@ ${s.student||""}
 `;
 
 
+
 });
+
 
 
 html+="</div>";
 
 
+
 classroom.innerHTML=html;
 
 
+
 }
+
+
+
 
 
 
@@ -94,35 +190,64 @@ classroom.innerHTML=html;
 
 function startSystem(){
 
+
 callAPI({
+
 action:"start"
+
 })
-.then(load);
+
+.then(update);
+
+
 
 }
+
+
 
 
 
 function stopSystem(){
 
+
 callAPI({
+
 action:"stop"
+
 })
-.then(load);
+
+.then(update);
+
 
 }
+
+
+
 
 
 
 function resetSystem(){
 
+
 callAPI({
+
 action:"reset"
+
 })
-.then(load);
+
+.then(update);
+
 
 }
 
 
 
-load();
+
+
+
+
+
+update();
+
+
+setInterval(update,2000);
