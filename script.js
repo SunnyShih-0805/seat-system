@@ -2,6 +2,7 @@ const API =
 "https://script.google.com/macros/s/AKfycbwGFm2npV_MSA7-CAYcRUh3omPbU-Vsu7Mt-RIk28Ne6kNV4Uv414evLa5Ramfyr_aglA/exec";
 
 
+
 let student=null;
 
 
@@ -9,12 +10,19 @@ let student=null;
 function callAPI(data){
 
 return fetch(API,{
+
 method:"POST",
+
 body:JSON.stringify(data)
+
 })
+
 .then(r=>r.json());
 
 }
+
+
+
 
 
 
@@ -31,9 +39,11 @@ document.getElementById("number").value;
 callAPI({
 
 action:"login",
+
 number:number
 
 })
+
 
 .then(res=>{
 
@@ -41,6 +51,7 @@ number:number
 if(!res.success){
 
 alert(res.message);
+
 return;
 
 }
@@ -51,20 +62,20 @@ student=res.student;
 
 
 
-if(
-!student.rank ||
-student.rank==""
-){
-
-
 document
 .getElementById("loginBox")
 .style.display="none";
 
 
-document
-.getElementById("rankBox")
-.style.display="block";
+
+
+
+if(
+!student.rank
+){
+
+
+rankBox.style.display="block";
 
 
 return;
@@ -73,109 +84,25 @@ return;
 }
 
 
-loginBox.style.display="none";
 
 
 
-studentInfo.innerHTML=
-`
-姓名:${student.name}<br>
-排名:${student.rank}
-`;
+show();
 
 
 
-loadSystem();
-
-
-});
-
-
-}
-
-
-
-
-
-
-
-function loadSystem(){
-
-
-callAPI({
-action:"current"
-})
-
-.then(sys=>{
-
-
-if(Number(sys.rank)
-!=
-Number(student.rank)){
-
-
-status.innerHTML=
-"等待前面同學";
-
-return;
-
-}
-
-
-status.innerHTML=
-"輪到你選";
-
-
-setInterval(loadSystem,2000);
-
-
-});
-
-
-}
-
-
-
-
-
-
-
-function loadSeats(){
-
-
-callAPI({
-action:"seats"
-})
-
-.then(seats=>{
-
-
-let html="";
-
-
-seats.forEach(s=>{
-
-
-html+=`
-
-<div class="seat ${s.student?"locked":""}"
-onclick="choose('${s.id}')">
-
-${s.id}
-
-</div>
-
-`;
-
-});
-
-
-seatArea.innerHTML=html;
+startUpdate();
 
 
 });
 
 }
+
+
+
+
+
+
 
 
 
@@ -187,26 +114,15 @@ document.getElementById("rank").value;
 
 
 
-if(!rank){
-
-alert("請輸入排名");
-
-return;
-
-}
-
-
-
 callAPI({
 
 action:"rank",
 
-number:student.seatNumber,
+number:student.number,
 
 rank:rank
 
 })
-
 
 .then(res=>{
 
@@ -223,24 +139,13 @@ return;
 student.rank=rank;
 
 
-
-document
-.getElementById("rankBox")
-.style.display="none";
+rankBox.style.display="none";
 
 
-
-document
-.getElementById("studentInfo")
-.innerHTML=
-`
-姓名:${student.name}<br>
-排名:${rank}
-`;
+show();
 
 
-
-loadSystem();
+startUpdate();
 
 
 });
@@ -249,11 +154,225 @@ loadSystem();
 }
 
 
+
+
+
+
+
+
+
+function show(){
+
+
+
+info.innerHTML=
+`
+姓名:${student.name}
+<br>
+排名:${student.rank}
+`;
+
+
+
+}
+
+
+
+
+
+
+
+
+
+function startUpdate(){
+
+
+
+update();
+
+
+setInterval(update,2000);
+
+
+
+}
+
+
+
+
+
+
+
+
+function update(){
+
+
+
+callAPI({
+
+action:"status",
+
+number:student.number
+
+
+})
+
+.then(data=>{
+
+
+student=data.student;
+
+
+drawSeats(data.seats);
+
+
+
+let sys=data.system;
+
+
+
+if(sys.status!="RUNNING"){
+
+
+status.innerHTML=
+"等待老師開始";
+
+
+return;
+
+}
+
+
+
+
+if(
+Number(student.rank)
+==
+Number(sys.currentRank)
+&&
+!student.seat
+){
+
+
+status.innerHTML=
+"輪到你選";
+
+
+enableSeat=true;
+
+
+}
+
+else{
+
+
+status.innerHTML=
+"等待其他同學";
+
+
+enableSeat=false;
+
+
+}
+
+
+
+
+});
+
+}
+
+
+
+
+
+
+
+
+let enableSeat=false;
+
+
+
+
+
+
+
+
+function drawSeats(seats){
+
+
+let html="";
+
+
+
+seats.forEach(s=>{
+
+
+let cls="seat";
+
+
+
+if(s.student){
+
+cls+=" locked";
+
+}
+
+
+if(
+student &&
+s.student==student.number
+){
+
+cls+=" mine";
+
+}
+
+
+
+
+html+=`
+
+<div
+
+class="${cls}"
+
+onclick="choose('${s.id}')"
+
+>
+
+${s.id}
+
+</div>
+
+`;
+
+
+});
+
+
+
+seatArea.innerHTML=html;
+
+
+}
+
+
+
+
+
+
+
+
+
 function choose(id){
 
 
-if(!confirm("選擇 "+id+" ?"))
+if(!enableSeat){
+
 return;
+
+}
 
 
 
@@ -261,7 +380,7 @@ callAPI({
 
 action:"choose",
 
-number:student.seatNumber,
+number:student.number,
 
 seat:id
 
@@ -279,21 +398,8 @@ return;
 }
 
 
-alert("完成");
+enableSeat=false;
 
-student.selectedSeat=id;
-student.locked=true;
-
-
-document.getElementById("seatArea").innerHTML=
-"選位完成，等待下一位";
-
-
-setTimeout(()=>{
-
-loadSystem();
-
-},1000);
 
 });
 
