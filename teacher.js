@@ -58,8 +58,13 @@ ${sys.status}
 
 <br>
 
-目前順位：
-${sys.currentRank}
+目前排名：
+
+${
+sys.currentStudent?
+sys.currentStudent.rank:
+"-"
+}
 
 <br>
 
