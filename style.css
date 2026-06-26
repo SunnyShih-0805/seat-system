@@ -1,9 +1,10 @@
 body{
 
 font-family:
-"Microsoft JhengHei";
+"Microsoft JhengHei",
+Arial;
 
-background:#f5f5f5;
+background:#f4f4f4;
 
 }
 
@@ -11,9 +12,9 @@ background:#f5f5f5;
 
 .container{
 
-width:700px;
+width:900px;
 
-margin:auto;
+margin:30px auto;
 
 text-align:center;
 
@@ -21,13 +22,32 @@ text-align:center;
 
 
 
-button,input{
+
+
+input{
 
 padding:10px;
 
-margin:5px;
+font-size:18px;
 
 }
+
+
+
+button{
+
+padding:10px 20px;
+
+margin:5px;
+
+font-size:16px;
+
+cursor:pointer;
+
+}
+
+
+
 
 
 
@@ -38,57 +58,174 @@ margin:5px;
 
 display:grid;
 
+
 grid-template-columns:
 repeat(8,80px);
 
+
+grid-auto-rows:70px;
+
+
 gap:15px;
+
 
 justify-content:center;
 
+
 margin-top:30px;
 
+
 }
+
+
 
 
 
 .seat{
 
 
-height:60px;
-
 background:white;
 
-border-radius:10px;
+
+border-radius:12px;
+
 
 display:flex;
 
+
 align-items:center;
+
 
 justify-content:center;
 
+
+font-size:18px;
+
+
+border:2px solid #ddd;
+
+
 cursor:pointer;
 
+
+transition:.2s;
+
+
 }
+
+
+
+
+
+.seat:hover{
+
+
+transform:scale(1.05);
+
+
+}
+
+
 
 
 
 
 .locked{
 
-background:#888;
+
+background:#777;
+
 
 color:white;
 
+
+cursor:not-allowed;
+
+
 }
+
+
+
+
+
+.mine{
+
+
+background:#ffd966;
+
+
+border-color:#f1b900;
+
+
+}
+
+
+
+
+
 
 
 
 .podium{
 
-margin:20px;
+
+grid-column:
+1 / 9;
+
+
+background:#ccc;
+
 
 padding:15px;
 
-background:#ddd;
+
+margin-bottom:20px;
+
+
+border-radius:12px;
+
+
+font-size:22px;
+
 
 }
+
+
+
+
+
+#students{
+
+
+background:white;
+
+
+padding:15px;
+
+
+border-radius:10px;
+
+
+text-align:left;
+
+
+line-height:2;
+
+
+}
+
+
+
+
+#system{
+
+
+font-size:20px;
+
+
+margin:20px;
+
+
+}
+
+
