@@ -169,18 +169,26 @@ students.innerHTML=html;
 function drawSeats(seats){
 
 
-let html=
+html=
 
 `
 
-<div class="podium">
+<div
+
+class="podium"
+
+style="
+grid-column:1 / 9;
+grid-row:1;
+"
+
+>
 
 講台
 
 </div>
 
 `;
-
 
 
 seats.forEach(s=>{
@@ -204,7 +212,7 @@ html+=`
 class="${cls}"
 
 style="
-grid-row:${s.row};
+grid-row:${Number(s.row)+1};
 grid-column:${s.col};
 "
 
