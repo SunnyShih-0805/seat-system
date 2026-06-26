@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 
 <head>
 
 <meta charset="UTF-8">
-<title>座位選擇系統</title>
+
+<title>座位選擇</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -17,44 +19,68 @@
 <div class="container">
 
 
-<h1>座位選擇</h1>
+<h1>座位選擇系統</h1>
+
 
 
 <div id="loginBox">
 
-<input id="number"
+
+<input 
+id="number"
 placeholder="輸入座號">
+
 
 <button onclick="login()">
 登入
 </button>
 
+
 </div>
 
 
-<div id="studentInfo"></div>
+
+
+
 <div id="rankBox" style="display:none;">
 
-<input 
+
+<input
 id="rank"
-placeholder="輸入你的班排名">
+placeholder="輸入班排名">
+
 
 <button onclick="submitRank()">
-確認排名
+確認
 </button>
+
 
 </div>
 
+
+
+
+
+<div id="info"></div>
+
+
 <div id="status"></div>
+
 
 <div id="seatArea"></div>
 
 
+
+
 </div>
+
+
 
 
 <script src="script.js"></script>
 
+
 </body>
+
 
 </html>
