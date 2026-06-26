@@ -104,7 +104,7 @@ status.innerHTML=
 "輪到你選";
 
 
-loadSeats();
+setInterval(loadSystem,2000);
 
 
 });
@@ -192,8 +192,19 @@ return;
 
 alert("完成");
 
-location.reload();
+student.selectedSeat=id;
+student.locked=true;
 
+
+document.getElementById("seatArea").innerHTML=
+"選位完成，等待下一位";
+
+
+setTimeout(()=>{
+
+loadSystem();
+
+},1000);
 
 });
 
