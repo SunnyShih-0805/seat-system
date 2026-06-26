@@ -287,7 +287,11 @@ else{
 status.innerHTML=
 `
 目前輪到：
-${sys.currentRank} 號
+${sys.currentStudent.number}號
+(${sys.currentStudent.name})
+<br>
+排名：
+${sys.currentRank}
 
 <br>
 
