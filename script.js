@@ -309,7 +309,6 @@ if(current){
 
 status.innerHTML=
 `
-
 目前輪到：
 
 ${current.number}號
@@ -319,6 +318,24 @@ ${current.name}
 
 排名：
 ${current.rank}
+
+`;
+
+}
+else{
+
+
+status.innerHTML=
+`
+
+目前輪到：
+
+尚未開始或無資料
+
+<br>
+
+目前排名：
+${sys.currentRank}
 
 `;
 
