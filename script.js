@@ -285,7 +285,7 @@ let current=sys.currentStudent;
 if(sys.status!="RUNNING"){
 
 
-status.innerHTML=
+document.getElementById("status").innerHTML=
 `
 等待老師開始
 
@@ -307,7 +307,7 @@ return;
 if(current){
 
 
-status.innerHTML=
+document.getElementById("status").innerHTML=
 `
 目前輪到：
 
@@ -325,7 +325,7 @@ ${current.rank}
 else{
 
 
-status.innerHTML=
+document.getElementById("status").innerHTML=
 `
 
 目前輪到：
@@ -352,7 +352,7 @@ Number(sys.currentRank)
 ){
 
 
-status.innerHTML+=
+document.getElementById("status").innerHTML+=
 `
 <br>
 可以選位
@@ -366,7 +366,7 @@ enableSeat=true;
 else{
 
 
-status.innerHTML+=
+document.getElementById("status").innerHTML+=
 `
 <br>
 等待中
