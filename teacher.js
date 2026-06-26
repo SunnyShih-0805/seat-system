@@ -3,6 +3,9 @@ const API =
 
 
 
+let timer;
+
+
 
 function callAPI(data){
 
@@ -22,7 +25,10 @@ body:JSON.stringify(data)
 
 
 
+
+
 function update(){
+
 
 
 callAPI({
@@ -31,15 +37,22 @@ action:"teacher"
 
 })
 
+
 .then(data=>{
+
 
 
 let sys=data.system;
 
 
 
+let current=sys.currentStudent;
+
+
+
 system.innerHTML=
 `
+
 狀態：
 ${sys.status}
 
@@ -48,8 +61,14 @@ ${sys.status}
 目前順位：
 ${sys.currentRank}
 
-`;
+<br>
 
+目前學生：
+${current?
+current.number+"號 "+current.name:
+"無"}
+
+`;
 
 
 
@@ -63,8 +82,8 @@ drawSeats(data.seats);
 
 });
 
-
 }
+
 
 
 
@@ -83,15 +102,46 @@ let html="";
 list.forEach(s=>{
 
 
+let online="⚪";
+
+
+
+if(s[5]){
+
+
+let t =
+new Date(s[5]);
+
+let now =
+new Date();
+
+
+if(
+(now-t)/1000 < 10
+){
+
+online="🟢";
+
+}
+
+
+}
+
+
+
 html+=`
 
 <div>
 
-座號:${s[0]}
-姓名:${s[1]}
-排名:${s[2]}
+${online}
 
-${s[5]?"🟢在線":"⚪未登入"}
+座號:${s[0]}
+
+姓名:${s[1]}
+
+排名:${s[2]||"-"}
+
+座位:${s[3]||"未選"}
 
 </div>
 
@@ -104,7 +154,6 @@ ${s[5]?"🟢在線":"⚪未登入"}
 
 
 students.innerHTML=html;
-
 
 
 }
@@ -121,19 +170,16 @@ function drawSeats(seats){
 
 
 let html=
+
 `
+
 <div class="podium">
+
 講台
+
 </div>
+
 `;
-
-
-
-html+=
-`
-<div class="classroom">
-`;
-
 
 
 
@@ -153,7 +199,18 @@ cls+=" locked";
 
 html+=`
 
-<div class="${cls}">
+<div
+
+class="${cls}"
+
+style="
+grid-row:${s.row};
+grid-column:${s.col};
+"
+
+onclick="unlock('${s.id}')"
+
+>
 
 ${s.id}
 
@@ -161,7 +218,9 @@ ${s.id}
 
 ${s.student||""}
 
+
 </div>
+
 
 `;
 
@@ -171,15 +230,12 @@ ${s.student||""}
 
 
 
-html+="</div>";
-
-
 
 classroom.innerHTML=html;
 
 
-
 }
+
 
 
 
@@ -200,8 +256,11 @@ action:"start"
 .then(update);
 
 
-
 }
+
+
+
+
 
 
 
@@ -226,12 +285,53 @@ action:"stop"
 
 
 
+
+
+
 function resetSystem(){
+
+
+if(!confirm("確定重置？"))
+return;
 
 
 callAPI({
 
 action:"reset"
+
+})
+
+.then(update);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+function unlock(id){
+
+
+if(!confirm(
+"解除 "+id+"?"
+))
+
+return;
+
+
+
+callAPI({
+
+action:"unlock",
+
+seat:id
+
 
 })
 
@@ -247,7 +347,12 @@ action:"reset"
 
 
 
+
 update();
 
 
-setInterval(update,2000);
+
+timer=setInterval(
+update,
+2000
+);
