@@ -1,28 +1,17 @@
 const API =
-"https://script.google.com/macros/s/AKfycbwGFm2npV_MSA7-CAYcRUh3omPbU-Vsu7Mt-RIk28Ne6kNV4Uv414evLa5Ramfyr_aglA/exec
-";
-
-
+"https://script.google.com/macros/s/AKfycbwGFm2npV_MSA7-CAYcRUh3omPbU-Vsu7Mt-RIk28Ne6kNV4Uv414evLa5Ramfyr_aglA/exec";
 
 
 
 function callAPI(data){
 
-
 return fetch(API,{
-
 method:"POST",
-
 body:JSON.stringify(data)
-
 })
-
-.then(res=>res.json());
-
+.then(r=>r.json());
 
 }
-
-
 
 
 
@@ -31,40 +20,25 @@ function load(){
 
 
 callAPI({
-
 action:"teacher"
-
 })
 
+.then(d=>{
 
-.then(data=>{
 
-
-document
-.getElementById("info")
-.innerHTML=
+info.innerHTML=
 `
-目前順位：
-${data.rank}
-<br>
-狀態：
-${data.enabled?"開放":"停止"}
+目前排名:${d.rank}
 `;
 
 
 
-drawSeats(data.seats);
-
+drawSeats(d.seats);
 
 
 });
 
-
 }
-
-
-
-
 
 
 
@@ -81,12 +55,7 @@ let html=
 
 
 
-
-
-html+=
-`
-<div class="grid">
-`;
+html+=`<div class="classroom">`;
 
 
 
@@ -95,10 +64,7 @@ seats.forEach(s=>{
 
 html+=`
 
-<div class="seat 
-${s.student?"locked":""}"
-onclick="unlock('${s.id}')">
-
+<div class="seat ${s.student?"locked":""}">
 
 ${s.id}
 
@@ -106,31 +72,21 @@ ${s.id}
 
 ${s.student||""}
 
-
 </div>
 
 `;
 
 
-
 });
-
 
 
 html+="</div>";
 
 
-
-document
-.getElementById("classroom")
-.innerHTML=html;
-
+classroom.innerHTML=html;
 
 
 }
-
-
-
 
 
 
@@ -138,90 +94,35 @@ document
 
 function startSystem(){
 
-
 callAPI({
-
 action:"start"
-
 })
-
 .then(load);
 
-
 }
-
-
 
 
 
 function stopSystem(){
 
-
 callAPI({
-
 action:"stop"
-
 })
-
 .then(load);
 
-
 }
-
-
 
 
 
 function resetSystem(){
 
-
-
-if(!confirm(
-"確定全部重置?"
-))return;
-
-
-
 callAPI({
-
 action:"reset"
-
 })
-
 .then(load);
-
-
-
-}
-
-
-
-
-
-
-function unlock(id){
-
-
-if(!confirm(
-"解除 "+id+"?"
-))return;
-
-
-
-callAPI({
-
-action:"unlock",
-
-seat:id
-
-})
-
-.then(load);
-
 
 }
 
 
 
 load();
-
