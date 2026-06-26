@@ -311,9 +311,6 @@ document.getElementById("status").innerHTML=
 `
 目前輪到：
 
-${current.number}號
-${current.name}
-
 <br>
 
 排名：
