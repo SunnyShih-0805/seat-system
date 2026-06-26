@@ -91,7 +91,7 @@ repeat(8,80px);
 
 
 grid-template-rows:
-repeat(6,70px);
+50px repeat(6,70px);
 
 
 gap:12px;
@@ -195,27 +195,16 @@ border-color:#d6a000;
 
 
 grid-column:
-
 1 / 9;
 
 
 grid-row:1;
 
 
-background:#ccc;
-
-
-border-radius:12px;
-
-
-padding:15px;
-
-
-font-size:22px;
+margin-bottom:10px;
 
 
 }
-
 
 
 
