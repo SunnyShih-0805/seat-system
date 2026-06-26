@@ -77,17 +77,31 @@ cursor:pointer;
 
 
 
-.seats{
+.stage{
 
-display:grid;
+font-size:22px;
 
-grid-template-columns:repeat(8,50px);
+font-weight:700;
 
-gap:10px;
+margin-bottom:25px;
+
+}
+
+.row{
+
+display:flex;
 
 justify-content:center;
 
-margin-top:20px;
+gap:10px;
+
+margin-bottom:10px;
+
+}
+
+.bottom{
+
+margin-top:25px;
 
 }
 
@@ -185,6 +199,11 @@ placeholder="輸入座號">
 
 <button onclick="resetAll()">
 重置系統
+
+<button onclick="prevRank()">上一名</button>
+
+<button onclick="nextRank()">下一名</button>
+
 </button>
 
 </div>
@@ -199,7 +218,11 @@ placeholder="輸入座號">
 <h3 id="status"></h3>
 
 
-<div class="seats" id="seats"></div>
+<div class="stage">
+講台
+</div>
+
+<div id="seats"></div>
 
 
 
@@ -357,8 +380,24 @@ choose(seat[0]);
 
 
 
-area.appendChild(div);
+const layout = [
+["A1","B1","C1","D1","E1","F1","G1","H1"],
+["A2","B2","C2","D2","E2","F2","G2","H2"],
+["A3","B3","C3","D3","E3","F3","G3","H3"],
+["A4","B4","C4","D4","E4","F4","G4","H4"],
+["A5","B5","C5","D5","E5","F5","G5","H5"],
+["","","C6","D6","E6","F6","",""]
+];
+let row=document.createElement("div");
+row.className="row";
+let blank=document.createElement("div");
 
+blank.style.width="50px";
+
+blank.style.height="50px";
+
+row.appendChild(blank);
+area.appendChild(row);
 
 }
 
@@ -367,7 +406,23 @@ area.appendChild(div);
 }
 
 
+async function prevRank(){
 
+  const res =
+    await fetch(API+"?action=dashboard");
+
+  const data =
+    await res.json();
+
+  await fetch(
+    API+
+    "?action=setCurrentRank&rank="+
+    Math.max(1,data.currentRank-1)
+  );
+
+  refreshAdmin();
+
+}
 
 async function choose(id){
 
@@ -492,36 +547,43 @@ async function checkTurn(){
 
 async function refreshAdmin(){
 
-  let res=
-  await fetch(
-    API+
-    "?action=dashboard"
-  );
+  const res =
+    await fetch(API+"?action=dashboard");
 
-  let data=
-  await res.json();
+  const data =
+    await res.json();
 
   let html="";
 
-  html+="目前輪到："+data.currentRank+"<br><br>";
+  html+="<h3>目前輪到："+data.currentRank+"名</h3>";
 
-  html+="已選座位：<br>";
+  html+="<table border='1' style='width:100%;border-collapse:collapse;'>";
 
-  for(let i=1;i<data.seats.length;i++){
+  html+="<tr>";
+  html+="<th>姓名</th>";
+  html+="<th>名次</th>";
+  html+="<th>完成</th>";
+  html+="</tr>";
 
-    if(
-      data.seats[i][1]==="Locked"
-    ){
+  for(let i=1;i<data.students.length;i++){
 
-      html+=
-      data.seats[i][0]
-      +" → "
-      +data.seats[i][2]
-      +"<br>";
+    html+="<tr>";
 
-    }
+    html+="<td>"+data.students[i][1]+"</td>";
+
+    html+="<td>"+data.students[i][2]+"</td>";
+
+    html+="<td>"+(data.students[i][3]?"✓":"")+"</td>";
+
+    html+="</tr>";
 
   }
+
+  html+="</table>";
+
+  document.getElementById("adminInfo").innerHTML=html;
+
+}
 
   document
   .getElementById("adminInfo")
