@@ -179,7 +179,74 @@ seatArea.innerHTML=html;
 
 
 
+function submitRank(){
 
+
+let rank =
+document.getElementById("rank").value;
+
+
+
+if(!rank){
+
+alert("請輸入排名");
+
+return;
+
+}
+
+
+
+callAPI({
+
+action:"rank",
+
+number:student.seatNumber,
+
+rank:rank
+
+})
+
+
+.then(res=>{
+
+
+if(!res.success){
+
+alert(res.message);
+
+return;
+
+}
+
+
+student.rank=rank;
+
+
+
+document
+.getElementById("rankBox")
+.style.display="none";
+
+
+
+document
+.getElementById("studentInfo")
+.innerHTML=
+`
+姓名:${student.name}<br>
+排名:${rank}
+`;
+
+
+
+loadSystem();
+
+
+});
+
+
+}
 
 
 function choose(id){
