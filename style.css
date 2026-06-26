@@ -44,16 +44,13 @@ padding:10px 20px;
 display:grid;
 
 grid-template-columns:
-repeat(5,80px);
+repeat(8,80px);
 
 gap:15px;
 
 justify-content:center;
 
-margin-top:30px;
-
 }
-
 
 
 .seat{
@@ -86,5 +83,41 @@ background:#aaa;
 cursor:not-allowed;
 
 color:white;
+
+}
+
+.podium{
+
+width:420px;
+
+margin:20px auto;
+
+padding:15px;
+
+background:#ddd;
+
+border-radius:10px;
+
+}
+
+
+
+.grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(5,80px);
+
+gap:15px;
+
+justify-content:center;
+
+}
+
+
+#classroom{
+
+margin-top:20px;
 
 }
