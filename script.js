@@ -5,6 +5,12 @@ const API =
 
 let student=null;
 
+let enableSeat=false;
+
+let timer=null;
+
+
+
 
 
 function callAPI(data){
@@ -16,11 +22,9 @@ method:"POST",
 body:JSON.stringify(data)
 
 })
-
 .then(r=>r.json());
 
 }
-
 
 
 
@@ -42,8 +46,8 @@ action:"login",
 
 number:number
 
-})
 
+})
 
 .then(res=>{
 
@@ -70,16 +74,15 @@ document
 
 
 
-if(
-!student.rank
-){
+if(!student.rank){
 
 
-rankBox.style.display="block";
+document
+.getElementById("rankBox")
+.style.display="block";
 
 
 return;
-
 
 }
 
@@ -87,14 +90,11 @@ return;
 
 
 
-show();
-
-
-
-startUpdate();
+start();
 
 
 });
+
 
 }
 
@@ -122,6 +122,7 @@ number:student.number,
 
 rank:rank
 
+
 })
 
 .then(res=>{
@@ -136,16 +137,77 @@ return;
 }
 
 
+
 student.rank=rank;
 
 
-rankBox.style.display="none";
+
+document
+.getElementById("rankBox")
+.style.display="none";
 
 
-show();
+
+start();
 
 
-startUpdate();
+
+});
+
+}
+
+
+
+
+
+
+
+
+
+function start(){
+
+
+showInfo();
+
+
+
+update();
+
+
+
+if(timer)return;
+
+
+
+timer=setInterval(update,2000);
+
+
+
+setInterval(heartbeat,5000);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+function heartbeat(){
+
+
+if(!student)return;
+
+
+callAPI({
+
+action:"heartbeat",
+
+number:student.number
 
 
 });
@@ -161,41 +223,25 @@ startUpdate();
 
 
 
-function show(){
-
+function showInfo(){
 
 
 info.innerHTML=
 `
-姓名:${student.name}
+姓名：
+${student.name}
+
 <br>
-排名:${student.rank}
+
+排名：
+${student.rank}
+
 `;
 
 
 
 }
 
-
-
-
-
-
-
-
-
-function startUpdate(){
-
-
-
-update();
-
-
-setInterval(update,2000);
-
-
-
-}
 
 
 
@@ -223,11 +269,16 @@ number:student.number
 student=data.student;
 
 
+
 drawSeats(data.seats);
 
 
 
 let sys=data.system;
+
+
+
+let current=sys.currentStudent;
 
 
 
@@ -238,13 +289,38 @@ status.innerHTML=
 `
 等待老師開始
 
-<br>
-
-目前尚未開始
-
 `;
 
+enableSeat=false;
+
 return;
+
+
+}
+
+
+
+
+
+
+
+if(current){
+
+
+status.innerHTML=
+`
+
+目前輪到：
+
+${current.number}號
+${current.name}
+
+<br>
+
+排名：
+${current.rank}
+
+`;
 
 }
 
@@ -259,22 +335,11 @@ Number(sys.currentRank)
 ){
 
 
-status.innerHTML=
+status.innerHTML+=
 `
-目前輪到：
-${sys.currentRank} 號
-
 <br>
-
-你的排名：
-${student.rank}
-
-<br>
-
 可以選位
-
 `;
-
 
 enableSeat=true;
 
@@ -284,27 +349,11 @@ enableSeat=true;
 else{
 
 
-status.innerHTML=
+status.innerHTML+=
 `
-目前輪到：
-${sys.currentStudent.number}號
-(${sys.currentStudent.name})
 <br>
-排名：
-${sys.currentRank}
-
-<br>
-
-你的排名：
-${student.rank}
-
-<br>
-
 等待中
-
 `;
-
-
 
 enableSeat=false;
 
@@ -313,19 +362,10 @@ enableSeat=false;
 
 
 
-
 });
 
 }
 
-
-
-
-
-
-
-
-let enableSeat=false;
 
 
 
@@ -355,6 +395,7 @@ cls+=" locked";
 }
 
 
+
 if(
 student &&
 s.student==student.number
@@ -366,12 +407,16 @@ cls+=" mine";
 
 
 
-
 html+=`
 
 <div
 
 class="${cls}"
+
+style="
+grid-row:${s.row};
+grid-column:${s.col};
+"
 
 onclick="choose('${s.id}')"
 
@@ -382,6 +427,7 @@ ${s.id}
 </div>
 
 `;
+
 
 
 });
@@ -420,12 +466,14 @@ number:student.number,
 
 seat:id
 
+
 })
 
 .then(res=>{
 
 
 if(!res.success){
+
 
 alert(res.message);
 
@@ -434,7 +482,13 @@ return;
 }
 
 
+
 enableSeat=false;
+
+
+
+update();
+
 
 
 });
