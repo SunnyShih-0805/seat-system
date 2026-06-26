@@ -307,9 +307,11 @@ return;
 if(current){
 
 
-document.getElementById("status").innerHTML=
+document
+.getElementById("status")
+.innerHTML=
 `
-目前輪到：
+目前進行到：
 
 <br>
 
@@ -322,21 +324,20 @@ ${current.rank}
 else{
 
 
-document.getElementById("status").innerHTML=
+document
+.getElementById("status")
+.innerHTML=
 `
-
-目前輪到：
-
-尚未開始或無資料
+目前進行到：
 
 <br>
 
-目前排名：
-${sys.currentRank}
+尚未開始
 
 `;
 
 }
+``
 
 
 
