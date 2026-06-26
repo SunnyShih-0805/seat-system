@@ -235,13 +235,18 @@ if(sys.status!="RUNNING"){
 
 
 status.innerHTML=
-"等待老師開始";
+`
+等待老師開始
 
+<br>
+
+目前尚未開始
+
+`;
 
 return;
 
 }
-
 
 
 
@@ -255,7 +260,20 @@ Number(sys.currentRank)
 
 
 status.innerHTML=
-"輪到你選";
+`
+目前輪到：
+${sys.currentRank} 號
+
+<br>
+
+你的排名：
+${student.rank}
+
+<br>
+
+可以選位
+
+`;
 
 
 enableSeat=true;
@@ -267,7 +285,21 @@ else{
 
 
 status.innerHTML=
-"等待其他同學";
+`
+目前輪到：
+${sys.currentRank} 號
+
+<br>
+
+你的排名：
+${student.rank}
+
+<br>
+
+等待中
+
+`;
+
 
 
 enableSeat=false;
