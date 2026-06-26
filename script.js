@@ -315,9 +315,11 @@ document
 
 <br>
 
-排名：
-${current.rank}
+目前排名：
 
+${sys.currentStudent?
+sys.currentStudent.rank:
+"尚未開始"}
 `;
 
 }
@@ -342,9 +344,10 @@ document
 
 
 if(
-Number(student.rank)
+sys.currentStudent &&
+String(student.number)
 ==
-Number(sys.currentRank)
+String(sys.currentStudent.number)
 &&
 !student.seat
 ){
