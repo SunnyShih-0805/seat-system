@@ -1,7 +1,5 @@
 const API =
-"https://script.google.com/macros/s/AKfycbwGFm2npV_MSA7-CAYcRUh3omPbU-Vsu7Mt-RIk28Ne6kNV4Uv414evLa5Ramfyr_aglA/exec
-";
-
+"https://script.google.com/macros/s/AKfycbwGFm2npV_MSA7-CAYcRUh3omPbU-Vsu7Mt-RIk28Ne6kNV4Uv414evLa5Ramfyr_aglA/exec";
 
 
 let student=null;
@@ -10,19 +8,14 @@ let student=null;
 
 function callAPI(data){
 
-
 return fetch(API,{
-
 method:"POST",
-
 body:JSON.stringify(data)
-
 })
-
-.then(res=>res.json());
-
+.then(r=>r.json());
 
 }
+
 
 
 
@@ -30,7 +23,7 @@ body:JSON.stringify(data)
 function login(){
 
 
-let number=
+let number =
 document.getElementById("number").value;
 
 
@@ -38,9 +31,7 @@ document.getElementById("number").value;
 callAPI({
 
 action:"login",
-
 number:number
-
 
 })
 
@@ -50,7 +41,6 @@ number:number
 if(!res.success){
 
 alert(res.message);
-
 return;
 
 }
@@ -61,19 +51,14 @@ student=res.student;
 
 
 
-document
-.getElementById("loginBox")
-.style.display="none";
+loginBox.style.display="none";
 
 
 
-document
-.getElementById("studentInfo")
-.innerHTML=
+studentInfo.innerHTML=
 `
-姓名：${student.name}
-<br>
-排名：${student.rank}
+姓名:${student.name}<br>
+排名:${student.rank}
 `;
 
 
@@ -89,39 +74,34 @@ loadSystem();
 
 
 
+
+
+
 function loadSystem(){
 
 
-
 callAPI({
-
 action:"current"
-
-
 })
 
 .then(sys=>{
 
 
-if(sys.rank!=student.rank){
+if(Number(sys.rank)
+!=
+Number(student.rank)){
 
-document
-.getElementById("status")
-.innerHTML=
-"等待前面同學選位";
 
+status.innerHTML=
+"等待前面同學";
 
 return;
 
 }
 
 
-
-document
-.getElementById("status")
-.innerHTML=
-"輪到你選位";
-
+status.innerHTML=
+"輪到你選";
 
 
 loadSeats();
@@ -136,14 +116,13 @@ loadSeats();
 
 
 
+
+
 function loadSeats(){
 
 
-
 callAPI({
-
 action:"seats"
-
 })
 
 .then(seats=>{
@@ -152,24 +131,12 @@ action:"seats"
 let html="";
 
 
-
 seats.forEach(s=>{
 
 
-let disabled =
-s.student
-?
-"locked"
-:
-"";
+html+=`
 
-
-
-html+=
-`
-
-<div 
-class="seat ${disabled}"
+<div class="seat ${s.student?"locked":""}"
 onclick="choose('${s.id}')">
 
 ${s.id}
@@ -178,16 +145,10 @@ ${s.id}
 
 `;
 
-
-
 });
 
 
-
-document
-.getElementById("seatArea")
-.innerHTML=html;
-
+seatArea.innerHTML=html;
 
 
 });
@@ -197,14 +158,13 @@ document
 
 
 
+
+
 function choose(id){
 
 
-
-if(!confirm(
-"確定選擇 "+id+"?"
-))return;
-
+if(!confirm("選擇 "+id+" ?"))
+return;
 
 
 
@@ -230,10 +190,7 @@ return;
 }
 
 
-
-alert("選位成功");
-
-
+alert("完成");
 
 location.reload();
 
