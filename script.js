@@ -12,7 +12,6 @@ let timer=null;
 
 
 
-
 function callAPI(data){
 
 return fetch(API,{
@@ -513,3 +512,6 @@ update();
 
 
 }
+
+
+
