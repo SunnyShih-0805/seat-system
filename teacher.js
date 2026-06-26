@@ -1,5 +1,6 @@
 const API =
-"https://你的GAS網址/exec";
+"https://script.google.com/macros/s/AKfycbwGFm2npV_MSA7-CAYcRUh3omPbU-Vsu7Mt-RIk28Ne6kNV4Uv414evLa5Ramfyr_aglA/exec
+";
 
 
 
